@@ -1,0 +1,15 @@
+POST https://3by6vmq2zf.execute-api.us-east-1.amazonaws.com/dev/users/create
+Content-Type: application/json
+
+{"very likely": 1.0,
+  "already voted": 1.0,
+  "likely": 0.7,
+  "somewhat likely": 0.4,
+  "neither likely": 0.2,
+  "somewhat unlikely": 0.1,
+  "unlikely": 0.05,
+  "2020 voted": 0.5,
+  "weigh_on": ["gender", "race", "education", "income", "age", "vote2016", "vote2020", "loc_county"]
+}
+
+###
