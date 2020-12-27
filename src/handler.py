@@ -1,13 +1,35 @@
 import json
+import pickle5 as pickle
+
 import pandas as pd
 import numpy as np
 import scipy.stats as stat
 
 from math import sqrt
 from surveyweights import run_weighting_iteration, run_weighting_scheme, normalize_weights
-
+import boto3
+import os
 
 # todo avx2?
+
+
+def get_pkl(bucket_name, key):
+	s3 = boto3.resource('s3')
+
+	obj = s3.Object(
+
+		bucket_name=bucket_name,
+
+		key=key,
+
+	)
+
+	obj_body = obj.get()['Body'].read()
+	data = pickle.loads(obj_body)
+
+	return data
+
+
 
 def margin_of_error(n=None, sd=None, p=None, type='proportion', interval_size=0.95):
 	z_lookup = {0.8: 1.28, 0.85: 1.44, 0.9: 1.65, 0.95: 1.96, 0.99: 2.58}
@@ -121,67 +143,8 @@ def print_result(mean, high, low, n, raw_moe, margin, sigma, chance_pass, dem_na
 
 def hello(event, context):
 	body = json.loads(event["body"])
-	# %%
-
-	survey = pd.read_csv('responses_processed.csv')
-
-	# %%
-
-	# <editor-fold desc="Census">
-	GA_CENSUS = {'gender': {'Female': 0.511,
-							'Male': 0.483,
-							'Other': 0.006},
-				 # Male-Female from 2010 US Census https://www.census.gov/prod/cen2010/briefs/c2010br-03.pdf, other from https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5227946/
-				 'race': {'White, not Hispanic': 0.520,
-						  'Black, non-Hispanic': 0.326,
-						  'Hispanic': 0.099,
-						  'Other': 0.055},  # https://www.census.gov/quickfacts/GA
-				 'education': {'Graduated from college': 0.183,
-							   'Some college, no degree': 0.284,
-							   'Completed graduate school': 0.091,
-							   'Graduated from high school': 0.301,
-							   'Less than high school': 0.141},
-				 # https://statisticalatlas.com/state/Georgia/Educational-Attainment
-				 'income': {'Under $15,000': 0.1376,
-							'Between $15,000 and $49,999': 0.3524,
-							'Between $50,000 and $74,999': 0.1801,
-							'Between $75,000 and $99,999': 0.116,
-							'Between $100,000 and $150,000': 0.1207,
-							'Over $150,000': 0.0932},  # https://statisticalatlas.com/state/Georgia/Household-Income
-				 'age': {'Under 65': 0.8128,
-						 '65+': 0.1872},  # https://www.census.gov/quickfacts/GA
-				 'vote2016': {'Donald Trump': 0.504,
-							  'Hillary Clinton': 0.453,
-							  'Other': 0.043},
-				 'vote2020': {'Joe Biden': 0.495,
-							  'Donald Trump': 0.493,
-							  'Other': 0.012},
-				 'loc_county': {'Fulton County, GA': 0.1,
-								'Cobb County, GA': 0.072,
-								'Gwinnett County, GA': 0.088,
-								'DeKalb County, GA': 0.0715,
-								'Another county in Georgia': 0.6685},
-				 'gss_trust': {'Can trust': 0.331,
-							   'Can\'t be too careful': 0.669},
-				 # From GSS 2018 https://gssdataexplorer.norc.org/variables/441/vshow
-				 'gss_bible': {'Word of God': 0.41,
-							   'Inspired word': 0.46,
-							   'Book of fables': 0.13},
-				 # From GSS 2018 https://gssdataexplorer.norc.org/variables/364/vshow (Region=South)
-				 'gss_spanking': {'Agree': 0.677, 'Disagree': 0.323},
-				 # From GSS 2018 https://gssdataexplorer.norc.org/trends/Gender%20&%20Marriage?measure=spanking
-				 'social_fb': {'No': 0.31,
-							   'Yes': 0.69}}  # https://www.pewresearch.org/internet/fact-sheet/social-media/
-	# </editor-fold>
-
-	weigh_on = body["weigh_on"]
-
-	run_weighting_iteration(survey, weigh_on=weigh_on, census=GA_CENSUS)
-
-	# %%
-
-	output = run_weighting_scheme(survey, iters=35, weigh_on=weigh_on, census=GA_CENSUS, verbose=0,
-								  early_terminate=False)
+	print(body)
+	survey = get_pkl(os.environ["BUCKET"], body["weigh_on_code"] + ".pkl")
 
 
 
@@ -209,7 +172,6 @@ def hello(event, context):
 						body["neither likely"],
 						body["somewhat unlikely"],
 						body["unlikely"]]) + body["2020 voted"]
-	max_possible = 1.5
 
 	survey['lv_index'] = survey['lv_index'].apply(
 		lambda l: perry_gallup_loadings[int(np.round(l * 7.0 / max_possible))])

@@ -2,3 +2,5 @@ pandas
 numpy
 scipy
 surveyweights
+boto3
+pickle5

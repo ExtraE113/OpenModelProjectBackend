@@ -9,7 +9,7 @@ Content-Type: application/json
   "somewhat unlikely": 0.1,
   "unlikely": 0.05,
   "2020 voted": 0.5,
-  "weigh_on": ["gender", "race", "education", "income", "age", "vote2016", "vote2020", "loc_county"]
+  "weigh_on_code": "111111111111"
 }
 
 ###

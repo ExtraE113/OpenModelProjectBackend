@@ -1,7 +1,10 @@
+import random
+
 import pandas as pd
 from surveyweights import run_weighting_iteration, run_weighting_scheme, normalize_weights
-
-
+from tqdm import tqdm
+import multiprocessing
+from joblib import Parallel, delayed
 
 # <editor-fold desc="Census">
 GA_CENSUS = {'gender': {'Female': 0.511,
@@ -53,9 +56,12 @@ survey_root = pd.read_csv('src/responses_processed.csv')
 weigh_on_root = ['gender', 'race', 'education', 'income', 'age', 'vote2016', 'vote2020', 'loc_county',
 				 'gss_trust', 'gss_bible', 'gss_spanking', 'social_fb']
 
-# for i in range(int('111111111111', 2) + 1):
-for i in range(int('1111', 2) + 1):
-	weights_id = bin(i)[2::].zfill(12)
+todo = list(range(int('111111111111', 2) + 1))
+random.shuffle(todo)  # shuffle so prediction time is accurate
+
+
+def calc_weights(weights_id_int):
+	weights_id = bin(weights_id_int)[2::].zfill(12)
 	survey = survey_root.copy()
 
 	weigh_on = []
@@ -64,10 +70,18 @@ for i in range(int('1111', 2) + 1):
 		if switch == "1":
 			weigh_on.append(weigh_on_root[index])
 
-	print(weigh_on)
+	# print(f"{weights_id_int}: {weigh_on}")
 
-	run_weighting_iteration(survey, weigh_on=weigh_on, census=GA_CENSUS, verbose=False)
-
-	output = run_weighting_scheme(survey, iters=35, weigh_on=weigh_on, census=GA_CENSUS, verbose=0, early_terminate=False)
+	output = run_weighting_scheme(survey, iters=100, weigh_on=weigh_on, census=GA_CENSUS, verbose=0,
+								  early_terminate=False)
+	survey = output['final_df']
 
 	survey.to_pickle(f"pkls/{weights_id}.pkl")
+
+
+num_cores = multiprocessing.cpu_count()-1  # save one for me!
+inputs = tqdm(todo)
+
+if __name__ == "__main__":
+	processed_list = Parallel(n_jobs=num_cores)(delayed(calc_weights)(i) for i in inputs)
+

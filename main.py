@@ -119,7 +119,7 @@ def print_result(mean, high, low, n, raw_moe, margin, sigma, chance_pass, dem_na
 
 # %%
 
-survey = pd.read_csv('src/responses_processed.csv')
+# survey = pd.read_csv('src/responses_processed.csv')
 
 # %%
 
@@ -169,13 +169,12 @@ GA_CENSUS = {'gender': {'Female': 0.511,
 			 'social_fb': {'No': 0.31, 'Yes': 0.69}}  # https://www.pewresearch.org/internet/fact-sheet/social-media/
 # </editor-fold>
 
-weigh_on = ['gender', 'race', 'education', 'income', 'age', 'vote2016', 'vote2020', 'loc_county',
-			'gss_trust', 'gss_bible', 'gss_spanking', 'social_fb']
-run_weighting_iteration(survey, weigh_on=weigh_on, census=GA_CENSUS)
+weigh_on = "000000001111"
 
-# %%
 
-output = run_weighting_scheme(survey, iters=35, weigh_on=weigh_on, census=GA_CENSUS, verbose=0, early_terminate=False)
+
+survey = pd.read_pickle("C:\\Users\\Ezra Newman\\PycharmProjects\\OpenModelProjectBackend\\pkls\\000000001111.pkl")
+
 
 # %%
 
