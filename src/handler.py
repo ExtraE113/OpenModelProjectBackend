@@ -6,7 +6,7 @@ import numpy as np
 import scipy.stats as stat
 
 from math import sqrt
-from surveyweights import run_weighting_iteration, run_weighting_scheme, normalize_weights
+from surveyweights import normalize_weights
 import boto3
 import os
 

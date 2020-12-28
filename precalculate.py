@@ -27,8 +27,11 @@ GA_CENSUS = {'gender': {'Female': 0.511,
 						'Between $75,000 and $99,999': 0.116,
 						'Between $100,000 and $150,000': 0.1207,
 						'Over $150,000': 0.0932},  # https://statisticalatlas.com/state/Georgia/Household-Income
-			 'age': {'Under 65': 0.8128,
-					 '65+': 0.1872},  # https://www.census.gov/quickfacts/GA
+			 'age': {'18-34': 0.278,
+					 '35-54': 0.359,
+					 '55-64': 0.167,
+					 '65 or older': 0.196},
+			 # https://www.statista.com/statistics/910774/georgia-population-share-age-group/
 			 'vote2016': {'Donald Trump': 0.504,
 						  'Hillary Clinton': 0.453,
 						  'Other': 0.043},
