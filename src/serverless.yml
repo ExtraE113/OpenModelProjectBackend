@@ -1,11 +1,12 @@
 org: openmodelproject
 app: poll-explorer
 
-service: src
+service: openmodelprojectbackend
 frameworkVersion: '2'
 
 provider:
   name: aws
+  stage: prod4
   runtime: python3.7
 
   iamRoleStatements:
@@ -13,7 +14,7 @@ provider:
       Action:
         - s3:GetObject
         - s3:PutObject
-      Resource: 'arn:aws:s3:::pickles-storage/*'
+      Resource: 'arn:aws:s3:::pickles-storage-production4/*'
 
 
 functions:
@@ -22,20 +23,20 @@ functions:
     handler: handler.hello
 
     environment:
-      BUCKET: pickles-storage
+      BUCKET: pickles-storage-production4
     events:
       - http:
-          path: users/create
+          path: inhousepolls/weight
           method: post
           cors: true
 
 
 resources:
   Resources:
-    PicklesStorage:
+    PicklesStorageProduction4:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: pickles-storage
+        BucketName: pickles-storage-production4
 
 plugins:
   - serverless-python-requirements
