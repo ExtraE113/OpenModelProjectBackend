@@ -127,7 +127,7 @@ def calc_weights(weights_id_int, foxnews = False):
 		survey['weight'] = 1
 	else:
 		census = FOX_NEWS_WEIGHTS if foxnews else GA_CENSUS
-		output = run_weighting_scheme(survey, iters=100, weigh_on=weigh_on, census=GA_CENSUS, verbose=0,
+		output = run_weighting_scheme(survey, iters=100, weigh_on=weigh_on, census=census, verbose=0,
 									  early_terminate=False)
 		survey = output['final_df']
 
