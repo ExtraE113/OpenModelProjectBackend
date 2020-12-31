@@ -136,9 +136,10 @@ def calc_weights(weights_id_int, foxnews = False):
 
 # num_cores = multiprocessing.cpu_count()-1  # save one for me!
 num_cores = multiprocessing.cpu_count()
-inputs = tqdm(todo)
+inputs1 = tqdm(todo)
+inputs2 = tqdm(todo)
 
 if __name__ == "__main__":
-	processed_list = Parallel(n_jobs=num_cores)(delayed(calc_weights)(i, False) for i in inputs)
-	processed_list = Parallel(n_jobs=num_cores)(delayed(calc_weights)(i, True) for i in inputs)
+	processed_list = Parallel(n_jobs=num_cores)(delayed(calc_weights)(i, False) for i in inputs1)
+	processed_list = Parallel(n_jobs=num_cores)(delayed(calc_weights)(i, True) for i in inputs2)
 
