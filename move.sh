@@ -1,0 +1,1 @@
+aws s3 cp pkls s3://pickles-storage-dev1/ --recursive
