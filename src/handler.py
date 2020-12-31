@@ -144,7 +144,7 @@ def print_result(mean, high, low, n, raw_moe, margin, sigma, chance_pass, dem_na
 def hello(event, context):
 	body = json.loads(event["body"])
 	print(body)
-	survey = get_pkl(os.environ["BUCKET"], body["weigh_on_code"] + ".pkl")
+	survey = get_pkl(os.environ["BUCKET"], body["weigh_on_code"] + body["exits"] + ".pkl")
 
 
 

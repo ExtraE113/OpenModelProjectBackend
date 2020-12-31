@@ -9,7 +9,8 @@ Content-Type: application/json
   "somewhat unlikely": 0.1,
   "unlikely": 0.05,
   "2020 voted": 0.5,
-  "weigh_on_code": "111111111111"
+  "weigh_on_code": "111111111111",
+  "exits": true
 }
 
 ###

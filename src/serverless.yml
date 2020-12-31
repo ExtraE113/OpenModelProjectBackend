@@ -6,7 +6,7 @@ frameworkVersion: '2'
 
 provider:
   name: aws
-  stage: prod4
+  stage: dev
   runtime: python3.7
 
   iamRoleStatements:
@@ -14,7 +14,7 @@ provider:
       Action:
         - s3:GetObject
         - s3:PutObject
-      Resource: 'arn:aws:s3:::pickles-storage-production4/*'
+      Resource: 'arn:aws:s3:::pickles-storage-dev1/*'
 
 
 functions:
@@ -23,7 +23,7 @@ functions:
     handler: handler.hello
 
     environment:
-      BUCKET: pickles-storage-production4
+      BUCKET: pickles-storage-dev1
     events:
       - http:
           path: inhousepolls/weight
@@ -36,7 +36,7 @@ resources:
     PicklesStorageProduction4:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: pickles-storage-production4
+        BucketName: pickles-storage-dev1
 
 plugins:
   - serverless-python-requirements
