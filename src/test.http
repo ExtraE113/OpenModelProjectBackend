@@ -1,4 +1,4 @@
-POST  https://i8mdraho5k.execute-api.us-east-1.amazonaws.com/prod4/inhousepolls/weight
+POST https://0azvedxiw3.execute-api.us-east-1.amazonaws.com/dev/inhousepolls/weight
 Content-Type: application/json
 
 {"very likely": 1.0,
@@ -10,7 +10,7 @@ Content-Type: application/json
   "unlikely": 0.05,
   "2020 voted": 0.5,
   "weigh_on_code": "111111111111",
-  "exits": true
+  "exits": "True"
 }
 
 ###
